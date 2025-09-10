@@ -15,8 +15,10 @@ private:
 	float mBoidAngle = 0;
 	Color mBoidColor = WHITE;
 
-	float mBoidDetectionZone = 30;
+	float mBoidMinimumDistance = 30;
+	float mBoidMaxPerceiveDistance = 120;
 	float mAvoidFactor = 0.035;
+	float mMatchingfactor = 0.045;
 
 public:
 	bool mBoidLunched = false;
@@ -29,5 +31,6 @@ public:
 	inline void SetSpeed(Vector2 pNewSpeed) { mBoidSpeedX = pNewSpeed.x; mBoidSpeedY = pNewSpeed.y; }
 	inline float GetAngle() { return mBoidAngle; }
 	void Separation(vector<Boid*> pBoids);
+	void Alignment(vector<Boid*> pBoids);
 };
 

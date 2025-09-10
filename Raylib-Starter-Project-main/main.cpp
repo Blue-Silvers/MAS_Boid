@@ -11,7 +11,7 @@ void Draw();
 void End();
 
 std::vector<Boid*> boidList;
-int boidCount = 20;
+int boidCount = 30;
 
 bool debugMode = true;
 
