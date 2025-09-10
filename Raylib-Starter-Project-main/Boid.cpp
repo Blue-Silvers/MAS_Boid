@@ -60,6 +60,8 @@ void Boid::CollideBoid()
 
 void Boid::Separation(vector<Boid*> pBoids)
 {
+    float close_dx = 0;
+    float close_dy = 0;
     for (int i = 0; i < pBoids.size(); i++)
     {
         if (pBoids[i] != this)
@@ -71,34 +73,32 @@ void Boid::Separation(vector<Boid*> pBoids)
                 //debug
                 //printf("Boid too close! Distance: %f\n", dist);
 
-                mBoidSpeedX *= -1;
-				mBoidSpeedY *= -1;
-
-                /*if (mBoidPosition.x - mBoidDetectionZone < pBoids[i]->mBoidPosition.x + mBoidDetectionZone)
-                {
-                    mBoidSpeedX *= -1;
-                    mBoidPosition.x = pBoids[i]->mBoidPosition.x + mBoidDetectionZone;
-                }
-                else if (mBoidPosition.x + mBoidDetectionZone < pBoids[i]->mBoidPosition.x - mBoidRadius)
-                {
-                    mBoidSpeedX *= -1;
-                    mBoidPosition.x = pBoids[i]->mBoidPosition.x - mBoidDetectionZone;
-                }
-                if (mBoidPosition.y - mBoidDetectionZone < pBoids[i]->mBoidPosition.y + mBoidDetectionZone)
-                {
-                    mBoidSpeedY*= -1;
-                    mBoidPosition.y = pBoids[i]->mBoidPosition.y + mBoidDetectionZone;
-                }
-                else if (mBoidPosition.y + mBoidDetectionZone < pBoids[i]->mBoidPosition.y - mBoidRadius)
-                {
-                    mBoidSpeedY *= -1;
-                    mBoidPosition.y = pBoids[i]->mBoidPosition.y - mBoidDetectionZone;
-                }*/
+                //mBoidSpeedX *= -1;
+				//mBoidSpeedY *= -1;
+                close_dx += mBoidPosition.x - pBoids[i]->mBoidPosition.x;
+                close_dy += mBoidPosition.y - pBoids[i]->mBoidPosition.y;
 
 
-                mBoidPosition.x += mBoidSpeedX;
-                mBoidPosition.y += mBoidSpeedY;
+                //mBoidPosition.x += mBoidSpeedX;
+                //mBoidPosition.y += mBoidSpeedY;
+
             }
         }
+    }
+
+    mBoidSpeedX += close_dx * mAvoidFactor;
+    mBoidSpeedY += close_dy * mAvoidFactor;
+
+
+    float speed = sqrt(mBoidSpeedX * mBoidSpeedX + mBoidSpeedY * mBoidSpeedY);
+    if (speed > mBoidSpeedMax) 
+    {
+        mBoidSpeedX = (mBoidSpeedX / speed) * mBoidSpeedMax;
+        mBoidSpeedY = (mBoidSpeedY / speed) * mBoidSpeedMin;
+    }
+    else if (speed < mBoidSpeedMax)
+    {
+        mBoidSpeedX = (mBoidSpeedX / speed) * mBoidSpeedMin;
+        mBoidSpeedY = (mBoidSpeedY / speed) * mBoidSpeedMin;
     }
 }

@@ -1,3 +1,0 @@
-﻿  main.cpp
-C:\Users\enzo.lahana\Downloads\MAS_Boid\Raylib-Starter-Project-main\main.cpp(44,19): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-  Raylib Starter Project.vcxproj -> C:\Users\enzo.lahana\Downloads\MAS_Boid\Raylib-Starter-Project-main\x64\Debug\Raylib Starter Project.exe

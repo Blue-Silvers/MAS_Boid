@@ -10,11 +10,13 @@ private:
 	Vector2 mBoidPosition = { 500, 500 };
 	float mBoidSpeedX = 2;
 	float mBoidSpeedY = -2;
-	float mBoidSpeedMax = 10;
+	float mBoidSpeedMax = 5;
+	float mBoidSpeedMin = 3;
 	float mBoidAngle = 0;
 	Color mBoidColor = WHITE;
 
-	float mBoidDetectionZone = 20;
+	float mBoidDetectionZone = 30;
+	float mAvoidFactor = 0.035;
 
 public:
 	bool mBoidLunched = false;
