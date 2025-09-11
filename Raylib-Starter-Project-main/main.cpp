@@ -11,7 +11,7 @@ void Draw();
 void End();
 
 std::vector<Boid*> boidList;
-int boidCount = 30;
+int boidCount = 50;
 
 bool debugMode = true;
 
@@ -39,7 +39,7 @@ void Update()
 {
     if (boidList.size() < boidCount)
     {
-        Vector2 randPos = Vector2{ (float)GetRandomValue(50, GetScreenWidth()-50), (float)GetRandomValue(50, GetScreenHeight() - 50) };
+        Vector2 randPos = Vector2{ (float)GetRandomValue(75, GetScreenWidth()- 75), (float)GetRandomValue(75, GetScreenHeight() - 75) };
         Boid* newBoid = new Boid(randPos);
 		float randSpeed = GetRandomValue(-20, 20);
         randSpeed = randSpeed / 10.0f;

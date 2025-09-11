@@ -8,22 +8,28 @@ using namespace std;
 class Boid {
 private:
 	Vector2 mBoidPosition = { 500, 500 };
+	int mBoidRadius = 5;
+	float mBoidAngle = 0;
+
 	float mBoidSpeedX = 2;
 	float mBoidSpeedY = -2;
 	float mBoidSpeedMax = 5;
 	float mBoidSpeedMin = 3;
-	float mBoidAngle = 0;
+
 	Color mBoidColor = WHITE;
 
 	float mBoidMinimumDistance = 30;
 	float mBoidMaxPerceiveDistance = 120;
+	float mCohesionRadius = 60;
+
 	float mAvoidFactor = 0.035;
-	float mMatchingfactor = 0.045;
+	float mMatchingFactor = 0.045;
+	float mCenteringFactor = 0.001;
+
+	bool mBoidLunched = false;
+
 
 public:
-	bool mBoidLunched = false;
-	int mBoidRadius = 5;
-
 	Boid(Vector2 pBoidPosition = Vector2{ 500, 500 });
 	void Update(int screenWidth, int screenHeight);
 	void Draw();
@@ -32,5 +38,6 @@ public:
 	inline float GetAngle() { return mBoidAngle; }
 	void Separation(vector<Boid*> pBoids);
 	void Alignment(vector<Boid*> pBoids);
+	void Cohesion(vector<Boid*> pBoids);
 };
 
