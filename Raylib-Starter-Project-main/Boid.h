@@ -8,7 +8,7 @@ using namespace std;
 class Boid {
 private:
 	Vector2 mBoidPosition = { 500, 500 };
-	int mBoidRadius = 5;
+	int mBoidRadius = 7;
 	float mBoidAngle = 0;
 
 	float mBoidSpeedX = 2;
@@ -28,16 +28,19 @@ private:
 
 	bool mBoidLunched = false;
 
+	Texture2D mBoidSprite;
 
 public:
 	Boid(Vector2 pBoidPosition = Vector2{ 500, 500 });
 	void Update(int screenWidth, int screenHeight);
 	void Draw();
 	void CollideBoid();
+
 	inline void SetSpeed(Vector2 pNewSpeed) { mBoidSpeedX = pNewSpeed.x; mBoidSpeedY = pNewSpeed.y; }
 	inline float GetAngle() { return mBoidAngle; }
+	inline void SetBoidTexture(Texture2D pTexture) { mBoidSprite = pTexture; }
+
 	void Separation(vector<Boid*> pBoids);
 	void Alignment(vector<Boid*> pBoids);
 	void Cohesion(vector<Boid*> pBoids);
 };
-

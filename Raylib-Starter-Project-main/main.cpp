@@ -12,6 +12,7 @@ void End();
 
 std::vector<Boid*> boidList;
 int boidCount = 50;
+Texture2D boidSprite;
 
 bool debugMode = true;
 
@@ -33,6 +34,7 @@ void Start()
 {
     InitWindow(1200, 800, "Boid MAS");
     SetTargetFPS(60);
+    boidSprite = LoadTexture("resources/Picture/pngegg.png");
 }
 
 void Update()
@@ -53,6 +55,7 @@ void Update()
 			startSpeed = Vector2{ randSpeed, 2 - randSpeed };
 		}
 		newBoid->SetSpeed(startSpeed);
+        newBoid->SetBoidTexture(boidSprite);
 
         //debug
 		printf("New boid speed x: %f, y: %f\n",  startSpeed.x, startSpeed.y);
