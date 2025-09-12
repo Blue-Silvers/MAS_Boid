@@ -14,9 +14,9 @@ void End();
 std::vector<Boid*> boidList;
 std::vector<Boid*> fugitiveBoidsList;
 std::vector<Boid*> hunterBoidsList;
-int boidCount = 10;
-int fugitiveBoidCount = 10;
-int hunterBoidCount = 10;
+int boidCount = 20;
+int fugitiveBoidCount = 20;
+int hunterBoidCount = 20;
 Texture2D boidSprite;
 
 std::vector<Obstacle*> obstacleList;
@@ -42,6 +42,72 @@ void Start()
     InitWindow(1200, 800, "Boid MAS");
     SetTargetFPS(60);
     boidSprite = LoadTexture("resources/Picture/WhiteFish.png");
+
+    for (int i = 0; i < boidCount; i++)
+    {
+        Vector2 randPos = Vector2{ (float)GetRandomValue(75, GetScreenWidth() - 75), (float)GetRandomValue(75, GetScreenHeight() - 75) };
+        Boid* newBoid = new Boid(randPos);
+        float randSpeed = GetRandomValue(-20, 20);
+        //randSpeed = randSpeed / 10.0f;
+        Vector2 startSpeed;
+        if (randSpeed < 0)
+        {
+            startSpeed = Vector2{ randSpeed, 2 + randSpeed };
+        }
+        else
+        {
+            startSpeed = Vector2{ randSpeed, 2 - randSpeed };
+        }
+        newBoid->SetSpeed(startSpeed);
+        newBoid->SetBoidTexture(boidSprite);
+
+
+        boidList.push_back(newBoid);
+    }
+
+    for (int i = 0; i < fugitiveBoidCount; i++)
+    {
+        Vector2 randPos = Vector2{ (float)GetRandomValue(75, GetScreenWidth() - 75), (float)GetRandomValue(75, GetScreenHeight() - 75) };
+        Boid* newBoid = new Boid(randPos, RED);
+        float randSpeed = GetRandomValue(-20, 20);
+        randSpeed = randSpeed / 10.0f;
+        Vector2 startSpeed;
+        if (randSpeed < 0)
+        {
+            startSpeed = Vector2{ randSpeed, 2 + randSpeed };
+        }
+        else
+        {
+            startSpeed = Vector2{ randSpeed, 2 - randSpeed };
+        }
+        newBoid->SetSpeed(startSpeed);
+        newBoid->SetBoidTexture(boidSprite);
+        newBoid->SetAvoidPredatorFactor(0.5f);
+
+        fugitiveBoidsList.push_back(newBoid);
+    }
+
+    for (int i = 0; i < hunterBoidCount; i++)
+    {
+        Vector2 randPos = Vector2{ (float)GetRandomValue(75, GetScreenWidth() - 75), (float)GetRandomValue(75, GetScreenHeight() - 75) };
+        Boid* newBoid = new Boid(randPos, GREEN);
+        float randSpeed = GetRandomValue(-20, 20);
+        randSpeed = randSpeed / 10.0f;
+        Vector2 startSpeed;
+        if (randSpeed < 0)
+        {
+            startSpeed = Vector2{ randSpeed, 2 + randSpeed };
+        }
+        else
+        {
+            startSpeed = Vector2{ randSpeed, 2 - randSpeed };
+        }
+        newBoid->SetSpeed(startSpeed);
+        newBoid->SetBoidTexture(boidSprite);
+        newBoid->SetFoodAttractFactor(0.2f);
+
+        hunterBoidsList.push_back(newBoid);
+	}
 }
 
 void Update()
@@ -49,7 +115,7 @@ void Update()
 	obstacleList.push_back(new Obstacle(Vector2{ 500, 200 }, Vector2{ 50, 100 }));
     obstacleList.push_back(new Obstacle(Vector2{ 800, 500 }, Vector2{ 50, 25 }));
 
-    if (boidList.size() < boidCount)
+    /*if (boidList.size() < boidCount)
     {
         Vector2 randPos = Vector2{ (float)GetRandomValue(75, GetScreenWidth()- 75), (float)GetRandomValue(75, GetScreenHeight() - 75) };
         Boid* newBoid = new Boid(randPos);
@@ -113,7 +179,7 @@ void Update()
 		newBoid->SetFoodAttractFactor(0.2f);
 
         hunterBoidsList.push_back(newBoid);
-    }
+    }*/
 
     for (int i = 0; i < boidList.size(); i++)
     {
@@ -152,7 +218,7 @@ void Draw()
 			boidList[i]-> SetColor(hunterBoidsList[0]->GetColor());
             hunterBoidsList.push_back(boidList[i]);
             boidList.erase(boidList.begin() + i);
-            //i--;
+            i--;
             
 			continue;
         }
@@ -167,7 +233,7 @@ void Draw()
             fugitiveBoidsList[i]->SetColor(boidList[0]->GetColor());
             boidList.push_back(fugitiveBoidsList[i]);
             fugitiveBoidsList.erase(fugitiveBoidsList.begin() + i);
-            //i--;
+            i--;
 
             continue;
         }
@@ -182,7 +248,7 @@ void Draw()
             hunterBoidsList[i]->SetColor(fugitiveBoidsList[0]->GetColor());
             fugitiveBoidsList.push_back(hunterBoidsList[i]);
             hunterBoidsList.erase(hunterBoidsList.begin() + i);
-            //i--;
+            i--;
 
             continue;
         }
