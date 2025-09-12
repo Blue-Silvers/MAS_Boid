@@ -14,9 +14,9 @@ void End();
 std::vector<Boid*> boidList;
 std::vector<Boid*> fugitiveBoidsList;
 std::vector<Boid*> hunterBoidsList;
-int boidCount = 20;
-int fugitiveBoidCount = 20;
-int hunterBoidCount = 20;
+int boidCount = 10;
+int fugitiveBoidCount = 10;
+int hunterBoidCount = 10;
 Texture2D boidSprite;
 
 std::vector<Obstacle*> obstacleList;
@@ -54,7 +54,7 @@ void Update()
         Vector2 randPos = Vector2{ (float)GetRandomValue(75, GetScreenWidth()- 75), (float)GetRandomValue(75, GetScreenHeight() - 75) };
         Boid* newBoid = new Boid(randPos);
 		float randSpeed = GetRandomValue(-20, 20);
-        randSpeed = randSpeed / 10.0f;
+        //randSpeed = randSpeed / 10.0f;
 		Vector2 startSpeed;
         if (randSpeed < 0) 
         {
@@ -88,7 +88,7 @@ void Update()
         }
         newBoid->SetSpeed(startSpeed);
         newBoid->SetBoidTexture(boidSprite);
-		newBoid->SetAvoidPredatorFactor(0.1f);
+		newBoid->SetAvoidPredatorFactor(0.2f);
 
         fugitiveBoidsList.push_back(newBoid);
     }
@@ -110,7 +110,7 @@ void Update()
         }
         newBoid->SetSpeed(startSpeed);
         newBoid->SetBoidTexture(boidSprite);
-		newBoid->SetFoodAttractFactor(0.1f);
+		newBoid->SetFoodAttractFactor(0.2f);
 
         hunterBoidsList.push_back(newBoid);
     }
@@ -124,7 +124,7 @@ void Update()
 
     for (int i = 0; i < fugitiveBoidsList.size(); i++)
     {
-        fugitiveBoidsList[i]->Separation(fugitiveBoidsList, fugitiveBoidsList, boidList);
+        fugitiveBoidsList[i]->Separation(fugitiveBoidsList, hunterBoidsList, boidList);
         fugitiveBoidsList[i]->ObstacleAvoid(obstacleList);
         fugitiveBoidsList[i]->Update(GetScreenWidth(), GetScreenHeight());
     }
@@ -143,20 +143,49 @@ void Draw()
 
     ClearBackground(BLUE);
 
-
     for (int i = 0; i < boidList.size(); i++)
     {
 		boidList[i]->Draw();
+        if (boidList[i]->GetIsAlive() == false) 
+        {
+            boidList[i]->SetIsAlive(true);
+			boidList[i]-> SetColor(hunterBoidsList[0]->GetColor());
+            hunterBoidsList.push_back(boidList[i]);
+            boidList.erase(boidList.begin() + i);
+            //i--;
+            
+			continue;
+        }
     }
 
     for (int i = 0; i < fugitiveBoidsList.size(); i++)
     {
         fugitiveBoidsList[i]->Draw();
+        if (fugitiveBoidsList[i]->GetIsAlive() == false)
+        {
+            fugitiveBoidsList[i]->SetIsAlive(true);
+            fugitiveBoidsList[i]->SetColor(boidList[0]->GetColor());
+            boidList.push_back(fugitiveBoidsList[i]);
+            fugitiveBoidsList.erase(fugitiveBoidsList.begin() + i);
+            //i--;
+
+            continue;
+        }
     }
 
     for (int i = 0; i < hunterBoidsList.size(); i++)
     {
         hunterBoidsList[i]->Draw();
+        if (hunterBoidsList[i]->GetIsAlive() == false)
+        {
+			hunterBoidsList[i]->SetIsAlive(true);
+            hunterBoidsList[i]->SetColor(fugitiveBoidsList[0]->GetColor());
+            fugitiveBoidsList.push_back(hunterBoidsList[i]);
+            hunterBoidsList.erase(hunterBoidsList.begin() + i);
+            //i--;
+
+            continue;
+        }
     }
 
 
@@ -164,6 +193,7 @@ void Draw()
     {
         obstacleList[i]->Draw();
     }
+
 
     EndDrawing();
 }

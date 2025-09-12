@@ -18,8 +18,8 @@ void Boid::Update(int screenWidth, int screenHeight)
 
     if (mBoidLunched)
     {
-        mBoidPosition.x += mBoidSpeedX;
-        mBoidPosition.y += mBoidSpeedY;
+        mBoidPosition.x += mBoidSpeedX*5 * GetFrameTime();
+        mBoidPosition.y += mBoidSpeedY*5 * GetFrameTime();
 
         /*float close_dx = 0;
         float close_dy = 0;
@@ -103,8 +103,8 @@ void Boid::Update(int screenWidth, int screenHeight)
 
 
     //calcul angle
-    mBoidAngle = sin(mBoidSpeedX / sqrt(mBoidSpeedX * mBoidSpeedX + mBoidSpeedY * mBoidSpeedY)) * -90;
-
+    //mBoidAngle = sin(mBoidSpeedX / sqrt(mBoidSpeedX * mBoidSpeedX + mBoidSpeedY * mBoidSpeedY))*90;
+	mBoidAngle = atan2(mBoidSpeedY,mBoidSpeedX)*90;
 }
 
 void Boid::Draw()
@@ -112,7 +112,7 @@ void Boid::Draw()
 
     //Separation zone Debug
     //DrawCircleLines(mBoidPosition.x - mBoidRadius, mBoidPosition.y - mBoidRadius, mBoidMinimumDistance, RED);
-	DrawLine(mBoidPosition.x, mBoidPosition.y, mBoidPosition.x + mBoidSpeedX * 10, mBoidPosition.y + mBoidSpeedY * 10, mBoidColor);
+	DrawLine(mBoidPosition.x, mBoidPosition.y, mBoidPosition.x + mBoidSpeedX , mBoidPosition.y + mBoidSpeedY , mBoidColor);
     //Cohesion zone Debug
     //DrawCircleLines(mBoidPosition.x - mBoidRadius, mBoidPosition.y - mBoidRadius, mCohesionRadius, ORANGE);
     //Alignement zone Debug
@@ -121,7 +121,7 @@ void Boid::Draw()
     //Draw boid
 	//DrawRectangle(mBoidPosition.x - mBoidRadius, mBoidPosition.y - mBoidRadius, mBoidRadius * 2, mBoidRadius * 2, mBoidColor);
 	//DrawRectanglePro(Rectangle{ mBoidPosition.x - mBoidRadius, mBoidPosition.y - mBoidRadius, (float)mBoidRadius * 2, (float)mBoidRadius * 2 }, Vector2{ (float)mBoidRadius, (float)mBoidRadius }, mBoidAngle, mBoidColor);
-    DrawTexturePro(mBoidSprite, Rectangle{ 0, 0, 512, 512 }, Rectangle{ mBoidPosition.x - mBoidRadius, mBoidPosition.y - mBoidRadius, (float)mBoidRadius * 2, (float)mBoidRadius * 2 }, Vector2{ (float)mBoidRadius, (float)mBoidRadius }, mBoidAngle, mBoidColor);
+    DrawTexturePro(mBoidSprite, Rectangle{ 0, 0, 512, 512 }, Rectangle{ mBoidPosition.x - mBoidRadius, mBoidPosition.y - mBoidRadius, (float)mBoidRadius * 2, (float)mBoidRadius * 2 }, Vector2{ (float)mBoidRadius, (float)mBoidRadius }, mBoidAngle+180, mBoidColor);
 
 }
 
@@ -268,6 +268,10 @@ void Boid::Alignment(vector<Boid*> pBoids, vector<Boid*> pFoodBoids)
                 boidSpeedX_Avg += pFoodBoids[i]->mBoidSpeedX;
                 boidSpeedY_Avg += pFoodBoids[i]->mBoidSpeedY;
                 neighboringBoids += 1;
+            }
+            if (dist <= mBoidMinimumDistance)
+            {
+				pFoodBoids[i]->SetIsAlive(false);
             }
         }
     }

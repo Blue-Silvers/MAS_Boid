@@ -12,10 +12,10 @@ private:
 	int mBoidRadius = 8;
 	float mBoidAngle = 0;
 
-	float mBoidSpeedX = 2;
-	float mBoidSpeedY = -2;
-	float mBoidSpeedMax = 5;
-	float mBoidSpeedMin = 3;
+	float mBoidSpeedX = 20;
+	float mBoidSpeedY = -20;
+	float mBoidSpeedMax = 50;
+	float mBoidSpeedMin = 30;
 
 	Color mBoidColor = WHITE;
 
@@ -29,7 +29,8 @@ private:
 	float mAvoidPredatorFactor = 0.035;
 	float mFoodAttractFactor = 0.05;
 
-	bool mBoidLunched = false;
+	bool mBoidLunched = true;
+	bool mIsAlive = true;
 
 	Texture2D mBoidSprite;
 
@@ -47,6 +48,10 @@ public:
 	inline void SetCenteringFactor(float pNewCenteringFactor) { mCenteringFactor = pNewCenteringFactor; }
 	inline void SetAvoidPredatorFactor(float pNewAvoidPredatorFactor) { mAvoidPredatorFactor = pNewAvoidPredatorFactor; }
 	inline void SetFoodAttractFactor(float pNewFoodAttractFactor) { mFoodAttractFactor = pNewFoodAttractFactor; }
+	inline void SetColor(Color pNewColor) { mBoidColor = pNewColor; }
+	inline void SetIsAlive(bool isAlive) { mIsAlive = isAlive; }
+	inline bool GetIsAlive() { return mIsAlive; }
+	inline Color GetColor() { return mBoidColor; }
 
 	void ObstacleAvoid(vector<Obstacle*> pObstacles);
 	void Separation(vector<Boid*> pBoids, vector<Boid*> pFoodBoids, vector<Boid*> pEvilBoids);
