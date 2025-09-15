@@ -1,0 +1,21 @@
+﻿  Boid.cpp
+C:\Users\fury8\OneDrive\Documents\GitHub\MAS_Boid\Raylib-Starter-Project-main\Boid.h(30,23): warning C4305: 'initializing': truncation from 'double' to 'float'
+  (compiling source file 'Boid.cpp')
+  
+C:\Users\fury8\OneDrive\Documents\GitHub\MAS_Boid\Raylib-Starter-Project-main\Boid.h(31,26): warning C4305: 'initializing': truncation from 'double' to 'float'
+  (compiling source file 'Boid.cpp')
+  
+C:\Users\fury8\OneDrive\Documents\GitHub\MAS_Boid\Raylib-Starter-Project-main\Boid.h(32,27): warning C4305: 'initializing': truncation from 'double' to 'float'
+  (compiling source file 'Boid.cpp')
+  
+C:\Users\fury8\OneDrive\Documents\GitHub\MAS_Boid\Raylib-Starter-Project-main\Boid.h(33,31): warning C4305: 'initializing': truncation from 'double' to 'float'
+  (compiling source file 'Boid.cpp')
+  
+C:\Users\fury8\OneDrive\Documents\GitHub\MAS_Boid\Raylib-Starter-Project-main\Boid.h(34,29): warning C4305: 'initializing': truncation from 'double' to 'float'
+  (compiling source file 'Boid.cpp')
+  
+C:\Users\fury8\OneDrive\Documents\GitHub\MAS_Boid\Raylib-Starter-Project-main\Boid.cpp(62,31): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\fury8\OneDrive\Documents\GitHub\MAS_Boid\Raylib-Starter-Project-main\Boid.cpp(66,43): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\fury8\OneDrive\Documents\GitHub\MAS_Boid\Raylib-Starter-Project-main\Boid.cpp(70,31): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\fury8\OneDrive\Documents\GitHub\MAS_Boid\Raylib-Starter-Project-main\Boid.cpp(74,44): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  Raylib Starter Project.vcxproj -> C:\Users\fury8\OneDrive\Documents\GitHub\MAS_Boid\Raylib-Starter-Project-main\x64\Debug\Raylib Starter Project.exe
