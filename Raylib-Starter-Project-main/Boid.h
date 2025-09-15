@@ -9,42 +9,47 @@ using namespace std;
 
 class Boid {
 private:
+	//Base information
 	Vector2 mBoidPosition = { 500, 500 };
 	int mBoidRadius = 8;
+	Color mBoidColor = WHITE;
+	Texture2D mBoidSprite;
+
+	//Rotation
 	float mBoidAngle = 0;
 	float mBoidActualAngle = 0;
 	float mBoidDesiredAngle = 0;
 	float mBoidMaxTurn = 5;
 
+	//Velocity
 	float mBoidSpeedX = 20;
 	float mBoidSpeedY = -20;
 	float mBoidSpeedMax = 50;
 	float mBoidSpeedMin = 30;
 
-	Color mBoidColor = WHITE;
-
+	//Detection zones
 	float mBoidMinimumDistance = 30;
 	float mBoidMaxPerceiveDistance = 220;
 	float mCohesionRadius = 580;
 
+	//Factor
 	float mAvoidFactor = 0.045;
 	float mMatchingFactor = 0.145;
 	float mCenteringFactor = 0.005;
 	float mAvoidPredatorFactor = 0.035;
 	float mFoodAttractFactor = 0.05;
 
+	//State
 	bool mBoidLunched = true;
 	bool mIsAlive = true;
-
-	Texture2D mBoidSprite;
 
 public:
 	Boid(Vector2 pBoidPosition = Vector2{ 500, 500 }, Color pColor = WHITE);
 	void Update(int screenWidth, int screenHeight);
 	void Draw();
-	void CollideBoid();
 	float NormalizeAngle(float angle);
 
+	//Getter & Setter
 	inline void SetSpeed(Vector2 pNewSpeed) { mBoidSpeedX = pNewSpeed.x; mBoidSpeedY = pNewSpeed.y; }
 	inline float GetAngle() { return mBoidActualAngle; }
 	inline void SetBoidTexture(Texture2D pTexture) { mBoidSprite = pTexture; }
@@ -58,6 +63,7 @@ public:
 	inline bool GetIsAlive() { return mIsAlive; }
 	inline Color GetColor() { return mBoidColor; }
 
+	//MAS fonction
 	void ObstacleAvoid(vector<Obstacle*> pObstacles);
 	void Separation(vector<Boid*> pBoids, vector<Boid*> pFoodBoids, vector<Boid*> pEvilBoids);
 	void Alignment(vector<Boid*> pBoids, vector<Boid*> pFoodBoids);

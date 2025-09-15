@@ -11,6 +11,7 @@ void Update();
 void Draw();
 void End();
 
+//Boids
 std::vector<Boid*> boidList;
 std::vector<Boid*> fugitiveBoidsList;
 std::vector<Boid*> hunterBoidsList;
@@ -19,9 +20,12 @@ int fugitiveBoidCount = 20;
 int hunterBoidCount = 20;
 Texture2D boidSprite;
 
+//Obstacle
 std::vector<Obstacle*> obstacleList;
 
-bool debugMode = true;
+
+//Font
+Font ft;
 
 int main() {
 
@@ -42,6 +46,7 @@ void Start()
     InitWindow(1200, 800, "Boid MAS");
     SetTargetFPS(60);
 
+    ft = LoadFont("resources/fonts/jupiter_crash.png");
     boidSprite = LoadTexture("resources/Picture/WhiteFish.png");
 
     for (int i = 0; i < boidCount; i++)
@@ -82,7 +87,7 @@ void Start()
         }
         newBoid->SetSpeed(startSpeed);
         newBoid->SetBoidTexture(boidSprite);
-        newBoid->SetAvoidPredatorFactor(0.5f);
+        newBoid->SetAvoidPredatorFactor(0.6f);
 
         fugitiveBoidsList.push_back(newBoid);
     }
@@ -104,7 +109,7 @@ void Start()
         }
         newBoid->SetSpeed(startSpeed);
         newBoid->SetBoidTexture(boidSprite);
-        newBoid->SetFoodAttractFactor(0.2f);
+        newBoid->SetFoodAttractFactor(0.3f);
 
         hunterBoidsList.push_back(newBoid);
 	}
@@ -197,6 +202,30 @@ void Draw()
         obstacleList[i]->Draw();
     }
 
+    if (fugitiveBoidsList.size() > 0) 
+    {
+        DrawTextEx(ft, TextFormat("Boid avoidant of predators : %02i", fugitiveBoidsList.size()), Vector2{ 5, 5 }, 20, 2, RED);
+    }
+    else 
+    {
+        DrawTextEx(ft, TextFormat("Boid avoidant of predators : ELIMINATED"), Vector2{ 5, 5 }, 20, 2, BLACK);
+    }
+    if (hunterBoidsList.size() > 0) 
+    {
+        DrawTextEx(ft, TextFormat("Boid aggressive : %02i", hunterBoidsList.size()), Vector2{ 5, 25 }, 20, 2, GREEN);
+    }
+    else
+    {
+        DrawTextEx(ft, TextFormat("Boid aggressive : ELIMINATED"), Vector2{ 5, 25 }, 20, 2, BLACK);
+    }
+    if (boidList.size() > 0)
+    {
+        DrawTextEx(ft, TextFormat("Boid balanced : %02i", boidList.size()), Vector2{ 5, 45 }, 20, 2, WHITE);
+    }
+    else 
+    {
+        DrawTextEx(ft, TextFormat("Boid balanced : ELIMINATED"), Vector2{ 5, 45 }, 20, 2, BLACK);
+    }
 
     EndDrawing();
 }

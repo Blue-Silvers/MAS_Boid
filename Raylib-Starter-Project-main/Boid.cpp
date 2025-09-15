@@ -79,22 +79,8 @@ void Boid::Update(int screenWidth, int screenHeight)
 
 void Boid::Draw()
 {
-
-    //Separation zone Debug
-    //DrawCircleLines(mBoidPosition.x - mBoidRadius, mBoidPosition.y - mBoidRadius, mBoidMinimumDistance, RED);
-	//DrawLine(mBoidPosition.x, mBoidPosition.y, mBoidPosition.x + mBoidSpeedX , mBoidPosition.y + mBoidSpeedY , mBoidColor);
-    //Cohesion zone Debug
-    //DrawCircleLines(mBoidPosition.x - mBoidRadius, mBoidPosition.y - mBoidRadius, mCohesionRadius, ORANGE);
-    //Alignement zone Debug
-    //DrawCircleLines(mBoidPosition.x - mBoidRadius, mBoidPosition.y - mBoidRadius, mBoidMaxPerceiveDistance, GREEN);
-
     //Draw boid
 	DrawTexturePro(mBoidSprite, Rectangle{ 0, 0, 512, 512 }, Rectangle{ mBoidPosition.x - mBoidRadius, mBoidPosition.y - mBoidRadius, (float)mBoidRadius * 2, (float)mBoidRadius * 2 }, Vector2{ (float)mBoidRadius, (float)mBoidRadius }, mBoidActualAngle+180, mBoidColor);
-
-}
-
-void Boid::CollideBoid()
-{
 }
 
 float Boid::NormalizeAngle(float angle)
