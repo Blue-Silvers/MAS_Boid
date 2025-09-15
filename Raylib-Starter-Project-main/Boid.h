@@ -23,9 +23,9 @@ private:
 	float mBoidMaxPerceiveDistance = 220;
 	float mCohesionRadius = 580;
 
-	float mAvoidFactor = 0.035;
+	float mAvoidFactor = 0.045;
 	float mMatchingFactor = 0.145;
-	float mCenteringFactor = 0.001;
+	float mCenteringFactor = 0.005;
 	float mAvoidPredatorFactor = 0.035;
 	float mFoodAttractFactor = 0.05;
 

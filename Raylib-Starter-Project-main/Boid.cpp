@@ -83,19 +83,19 @@ void Boid::Update(int screenWidth, int screenHeight)
         }*/
 
 		//Screen teleportation
-        if (mBoidPosition.x + mBoidRadius > screenWidth)
+        if (mBoidPosition.x  > screenWidth)
         {
             mBoidPosition.x = mBoidRadius;
         }
-        else if (mBoidPosition.x - mBoidRadius < 0)
+        else if (mBoidPosition.x  < 0)
         {
             mBoidPosition.x = screenWidth - mBoidRadius;
         }
-        else if (mBoidPosition.y + mBoidRadius > screenHeight)
+        else if (mBoidPosition.y  > screenHeight)
         {
             mBoidPosition.y = mBoidRadius;
         }
-        else if (mBoidPosition.y - mBoidRadius < 0)
+        else if (mBoidPosition.y  < 0)
         {
             mBoidPosition.y = screenHeight - mBoidRadius;
         }
@@ -103,8 +103,7 @@ void Boid::Update(int screenWidth, int screenHeight)
 
 
     //calcul angle
-    //mBoidAngle = sin(mBoidSpeedX / sqrt(mBoidSpeedX * mBoidSpeedX + mBoidSpeedY * mBoidSpeedY))*90;
-	mBoidAngle = atan2(mBoidSpeedY,mBoidSpeedX)*90;
+	mBoidAngle = atan2(mBoidSpeedY,mBoidSpeedX)* 180.0f / PI;
 }
 
 void Boid::Draw()
@@ -112,7 +111,7 @@ void Boid::Draw()
 
     //Separation zone Debug
     //DrawCircleLines(mBoidPosition.x - mBoidRadius, mBoidPosition.y - mBoidRadius, mBoidMinimumDistance, RED);
-	DrawLine(mBoidPosition.x, mBoidPosition.y, mBoidPosition.x + mBoidSpeedX , mBoidPosition.y + mBoidSpeedY , mBoidColor);
+	//DrawLine(mBoidPosition.x, mBoidPosition.y, mBoidPosition.x + mBoidSpeedX , mBoidPosition.y + mBoidSpeedY , mBoidColor);
     //Cohesion zone Debug
     //DrawCircleLines(mBoidPosition.x - mBoidRadius, mBoidPosition.y - mBoidRadius, mCohesionRadius, ORANGE);
     //Alignement zone Debug
