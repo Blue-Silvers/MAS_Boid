@@ -1,6 +1,7 @@
 #include "Boid.h"
 #include "Math.h"
 #include "Obstacle.h"
+#include <algorithm>
 
 Boid::Boid(Vector2 pBoidPosition, Color pColor)
 {
@@ -18,37 +19,28 @@ void Boid::Update(int screenWidth, int screenHeight)
 
     if (mBoidLunched)
     {
-        mBoidPosition.x += mBoidSpeedX*5 * GetFrameTime();
-        mBoidPosition.y += mBoidSpeedY*5 * GetFrameTime();
+        //Calcul angle
+        mBoidDesiredAngle = atan2(mBoidSpeedY, mBoidSpeedX) * 180.0f / PI;
 
-        /*float close_dx = 0;
-        float close_dy = 0;
+        float diff = NormalizeAngle(mBoidDesiredAngle - mBoidActualAngle);
+        if (diff < -mBoidMaxTurn)
+        {
+            diff = -mBoidMaxTurn;
+        }
+        else if (diff > mBoidMaxTurn)
+        {
+            diff = mBoidMaxTurn;
+        }
+        mBoidAngle = mBoidActualAngle + diff;
 
-        if (mBoidPosition.x + mBoidRadius > screenWidth - 50)
-        {
-            //mBoidSpeedX *= -1;
-            close_dx += mBoidPosition.x - (screenWidth + 50);
-        }
-        else if (mBoidPosition.x - mBoidRadius < 50)
-        {
-            //mBoidSpeedX *= -1;
-            close_dx += mBoidPosition.x + 50;
-        }
-        if (mBoidPosition.y + mBoidRadius > screenHeight - 50)
-        {
-            //mBoidSpeedY *= -1;
-            close_dy += mBoidPosition.y - (screenHeight + 50);
-        }
-        else if (mBoidPosition.y - mBoidRadius < 50)
-        {
-            //mBoidSpeedY *= -1;
-            close_dy += mBoidPosition.y + 50;
-        }
+        mBoidSpeedX = cos(mBoidAngle * PI / 180.0f);
+        mBoidSpeedY = sin(mBoidAngle * PI / 180.0f);
 
-        mBoidSpeedX += close_dx * mAvoidFactor;
-        mBoidSpeedY += close_dy * mAvoidFactor;*/
+        mBoidActualAngle = atan2(mBoidSpeedY, mBoidSpeedX) * 180.0f / PI;
 
-        /*float speed = sqrt(mBoidSpeedX * mBoidSpeedX + mBoidSpeedY * mBoidSpeedY);
+
+        //Convert Normalize Speed to classic Speed
+        float speed = sqrt(mBoidSpeedX * mBoidSpeedX + mBoidSpeedY * mBoidSpeedY);
         if (speed > mBoidSpeedMax)
         {
             mBoidSpeedX = (mBoidSpeedX / speed) * mBoidSpeedMax;
@@ -58,29 +50,11 @@ void Boid::Update(int screenWidth, int screenHeight)
         {
             mBoidSpeedX = (mBoidSpeedX / speed) * mBoidSpeedMin;
             mBoidSpeedY = (mBoidSpeedY / speed) * mBoidSpeedMin;
-        }*/
+        }
 
-		//Screen bounds collision
-        /*if (mBoidPosition.x + mBoidRadius > screenWidth)
-        {
-            mBoidSpeedX *= -1;
-            mBoidPosition.x = screenWidth - mBoidRadius;
-        }
-        else if (mBoidPosition.x - mBoidRadius < 0)
-        {
-            mBoidSpeedX *= -1;
-            mBoidPosition.x = mBoidRadius;
-        }
-        else if (mBoidPosition.y + mBoidRadius > screenHeight)
-        {
-            mBoidSpeedY *= -1;
-            mBoidPosition.y = screenHeight - mBoidRadius;
-        }
-        else if (mBoidPosition.y - mBoidRadius < 0)
-        {
-            mBoidSpeedY *= -1;
-            mBoidPosition.y = mBoidRadius;
-        }*/
+        mBoidPosition.x += mBoidSpeedX * 5 * GetFrameTime();
+        mBoidPosition.y += mBoidSpeedY * 5 * GetFrameTime();
+
 
 		//Screen teleportation
         if (mBoidPosition.x  > screenWidth)
@@ -101,9 +75,6 @@ void Boid::Update(int screenWidth, int screenHeight)
         }
     }
 
-
-    //calcul angle
-	mBoidAngle = atan2(mBoidSpeedY,mBoidSpeedX)* 180.0f / PI;
 }
 
 void Boid::Draw()
@@ -118,14 +89,25 @@ void Boid::Draw()
     //DrawCircleLines(mBoidPosition.x - mBoidRadius, mBoidPosition.y - mBoidRadius, mBoidMaxPerceiveDistance, GREEN);
 
     //Draw boid
-	//DrawRectangle(mBoidPosition.x - mBoidRadius, mBoidPosition.y - mBoidRadius, mBoidRadius * 2, mBoidRadius * 2, mBoidColor);
-	//DrawRectanglePro(Rectangle{ mBoidPosition.x - mBoidRadius, mBoidPosition.y - mBoidRadius, (float)mBoidRadius * 2, (float)mBoidRadius * 2 }, Vector2{ (float)mBoidRadius, (float)mBoidRadius }, mBoidAngle, mBoidColor);
-    DrawTexturePro(mBoidSprite, Rectangle{ 0, 0, 512, 512 }, Rectangle{ mBoidPosition.x - mBoidRadius, mBoidPosition.y - mBoidRadius, (float)mBoidRadius * 2, (float)mBoidRadius * 2 }, Vector2{ (float)mBoidRadius, (float)mBoidRadius }, mBoidAngle+180, mBoidColor);
+	DrawTexturePro(mBoidSprite, Rectangle{ 0, 0, 512, 512 }, Rectangle{ mBoidPosition.x - mBoidRadius, mBoidPosition.y - mBoidRadius, (float)mBoidRadius * 2, (float)mBoidRadius * 2 }, Vector2{ (float)mBoidRadius, (float)mBoidRadius }, mBoidActualAngle+180, mBoidColor);
 
 }
 
 void Boid::CollideBoid()
 {
+}
+
+float Boid::NormalizeAngle(float angle)
+{
+    while (angle > 180.0f) 
+    {
+        angle -= 360.0f;
+    }
+    while (angle < -180.0f) 
+    {
+        angle += 360.0f;
+    }
+    return angle;
 }
 
 void Boid::ObstacleAvoid(vector<Obstacle*> pObstacles)
@@ -135,32 +117,18 @@ void Boid::ObstacleAvoid(vector<Obstacle*> pObstacles)
 
     for (int i = 0; i < pObstacles.size(); i++)
     {
-        if (pObstacles[i]->GetPosition().x - pObstacles[i]->GetSize().x < mBoidPosition.x + mBoidRadius 
-            && pObstacles[i]->GetPosition().x + pObstacles[i]->GetSize().x > mBoidPosition.x
-            && pObstacles[i]->GetPosition().y - pObstacles[i]->GetSize().y < mBoidPosition.y + mBoidRadius
-            && pObstacles[i]->GetPosition().y + pObstacles[i]->GetSize().y > mBoidPosition.y)
+        if (pObstacles[i]->GetPosition().x - pObstacles[i]->GetSize().x < mBoidPosition.x + (mBoidMinimumDistance + mBoidRadius)
+            && pObstacles[i]->GetPosition().x + pObstacles[i]->GetSize().x > mBoidPosition.x - (mBoidMinimumDistance + mBoidRadius)
+            && pObstacles[i]->GetPosition().y - pObstacles[i]->GetSize().y < mBoidPosition.y + (mBoidMinimumDistance + mBoidRadius)
+            && pObstacles[i]->GetPosition().y + pObstacles[i]->GetSize().y > mBoidPosition.y - (mBoidMinimumDistance + mBoidRadius))
         {
             close_dx += mBoidPosition.x - pObstacles[i]->GetPosition().x;
             close_dy += mBoidPosition.y - pObstacles[i]->GetPosition().y;
         }
     }
 
-	//printf("close_dx: %f, close_dy: %f\n", close_dx, close_dy);
-
     mBoidSpeedX += close_dx * mAvoidFactor;
     mBoidSpeedY += close_dy * mAvoidFactor;
-
-    float speed = sqrt(mBoidSpeedX * mBoidSpeedX + mBoidSpeedY * mBoidSpeedY);
-    if (speed > mBoidSpeedMax)
-    {
-        mBoidSpeedX = (mBoidSpeedX / speed) * mBoidSpeedMax;
-        mBoidSpeedY = (mBoidSpeedY / speed) * mBoidSpeedMin;
-    }
-    else if (speed < mBoidSpeedMax)
-    {
-        mBoidSpeedX = (mBoidSpeedX / speed) * mBoidSpeedMin;
-        mBoidSpeedY = (mBoidSpeedY / speed) * mBoidSpeedMin;
-    }
 }
 
 void Boid::Separation(vector<Boid*> pBoids, vector<Boid*> pFoodBoids, vector<Boid*> pEvilBoids)
@@ -202,19 +170,6 @@ void Boid::Separation(vector<Boid*> pBoids, vector<Boid*> pFoodBoids, vector<Boi
     }
     mBoidSpeedX += close_dx * mAvoidPredatorFactor;
     mBoidSpeedY += close_dy * mAvoidPredatorFactor;
-
-    float speed = sqrt(mBoidSpeedX * mBoidSpeedX + mBoidSpeedY * mBoidSpeedY);
-    if (speed > mBoidSpeedMax) 
-    {
-        mBoidSpeedX = (mBoidSpeedX / speed) * mBoidSpeedMax;
-        mBoidSpeedY = (mBoidSpeedY / speed) * mBoidSpeedMin;
-    }
-    else if (speed < mBoidSpeedMax)
-    {
-        mBoidSpeedX = (mBoidSpeedX / speed) * mBoidSpeedMin;
-        mBoidSpeedY = (mBoidSpeedY / speed) * mBoidSpeedMin;
-    }
-
 
     Alignment(pBoids, pFoodBoids);
     Cohesion(pBoids);

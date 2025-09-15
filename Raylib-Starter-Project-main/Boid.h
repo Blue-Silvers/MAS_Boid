@@ -3,6 +3,7 @@
 #include "Obstacle.h"
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -11,6 +12,9 @@ private:
 	Vector2 mBoidPosition = { 500, 500 };
 	int mBoidRadius = 8;
 	float mBoidAngle = 0;
+	float mBoidActualAngle = 0;
+	float mBoidDesiredAngle = 0;
+	float mBoidMaxTurn = 5;
 
 	float mBoidSpeedX = 20;
 	float mBoidSpeedY = -20;
@@ -39,9 +43,10 @@ public:
 	void Update(int screenWidth, int screenHeight);
 	void Draw();
 	void CollideBoid();
+	float NormalizeAngle(float angle);
 
 	inline void SetSpeed(Vector2 pNewSpeed) { mBoidSpeedX = pNewSpeed.x; mBoidSpeedY = pNewSpeed.y; }
-	inline float GetAngle() { return mBoidAngle; }
+	inline float GetAngle() { return mBoidActualAngle; }
 	inline void SetBoidTexture(Texture2D pTexture) { mBoidSprite = pTexture; }
 	inline void SetAvoidFactor(float pNewAvoidFactor) { mAvoidFactor = pNewAvoidFactor; }
 	inline void SetMatchingFactor(float pNewMatchingFactor) { mMatchingFactor = pNewMatchingFactor; }
